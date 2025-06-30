@@ -1,0 +1,59 @@
+
+.rulerHorizontal {
+
+    display: flex;
+    position: relative;
+    margin: 36px auto 36px auto;
+    width: 815.33px;
+    height: 36px;
+}
+
+.rulerFace {
+
+    display: flex;
+    position: relative;
+    width: 815.33px;
+    overflow: hidden;
+    height: 36px;
+
+}
+
+.showGuide:after {
+    transform: translateX(6px);
+    content: "";
+    position: absolute;
+    height: 1400px;
+    width: 1px;
+    background: #4ad0ee;
+}
+
+.largeSeg {
+    position: relative;
+    height: 12px;
+    width: 1px;
+    background: white;
+}
+
+.smallSeg {
+    position: relative;
+    height: 8px;
+    width: 1px;
+    background: white;
+}
+
+.rulerNum {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.rulerPoint {
+    position: absolute;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 4px;
+    background: #4ad0ee;
+    z-index: 12;
+    cursor: pointer;
+}
