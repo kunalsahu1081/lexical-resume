@@ -33,7 +33,7 @@ export class DocumentTreeNode extends ElementNode {
     }
 
     static clone(node: DocumentTreeNode): DocumentTreeNode {
-        return new DocumentTreeNode(node.__top, node.__height, node.__width, node.__background, node.__key);
+        return new DocumentTreeNode(node.__left, node.__top, node.__height, node.__width, node.__background, node.__key);
     }
 
     // static importJSON(serializedNode: SerializedDocNode): DocumentTreeNode {
@@ -72,14 +72,15 @@ export class DocumentTreeNode extends ElementNode {
     }
 
     updateDOM(_prevNode: this, _dom: HTMLElement, _config: EditorConfig): boolean {
-        const isUpdated = super.updateDOM(_prevNode, _dom, _config);
+        // const isUpdated = super.updateDOM(_prevNode, _dom, _config);
 
         if (_prevNode.__top !== this.__top) _dom.style.top = this.__top + 'px';
         if (_prevNode.__width !== this.__width) _dom.style.width = this.__width + 'px';
         if (_prevNode.__height !== this.__height) _dom.style.right = this.__height + 'px';
         if (_prevNode.__background !== this.__background) _dom.style.background = this.__background;
+        if (_prevNode.__left !== this.__left) _dom.style.left = this.__left + 'px';
 
-        return isUpdated;
+        return true;
     }
 
 }
@@ -88,7 +89,7 @@ export function $createDocNode(left: number = 0,top: number = 0, height: number 
 
     const newNode = new DocumentTreeNode(left, top, height, width, background);
 
-    return {node: $applyNodeReplacement(newNode), c_key: newNode.__c_key}
+    return {node: $applyNodeReplacement(newNode), c_key: newNode.__key}
 
 }
 

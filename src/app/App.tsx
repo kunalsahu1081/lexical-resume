@@ -1,6 +1,6 @@
 // VanillaLexical.jsx
-import {useEffect, useRef} from 'react';
-import {$createParagraphNode, $createTextNode, $getRoot, createEditor, ParagraphNode, TextNode,} from 'lexical';
+import {createContext, useEffect, useRef, useState} from 'react';
+import {$createTextNode, $getRoot, createEditor, ParagraphNode, TextNode,} from 'lexical';
 import {registerDragonSupport} from '@lexical/dragon';
 import {createEmptyHistoryState, registerHistory} from '@lexical/history';
 import {registerRichText} from '@lexical/rich-text';
@@ -9,9 +9,15 @@ import {$createDocNode, DocumentTreeNode} from "../features/plugins/DocumentTree
 import HorizontalRuler from "../components/rulers/horizontal-ruler/horizontalRuler.tsx";
 import VerticalRuler from "../components/rulers/vertical-ruler/verticalRuler.tsx";
 
+const nodeBoundaryObject: any = {};
+
+export const SomeContext = createContext<unknown>(null)
+
 export default function VanillaLexical() {
     const editorRef = useRef<HTMLElement | null>(null);
     const editorInstance = useRef<unknown>(null);
+    const [ref_state, setRefState] = useState<any>(null);
+
 
     useEffect(() => {
         if (!editorRef.current) return;
@@ -26,6 +32,7 @@ export default function VanillaLexical() {
 
         // Mount to the DOM
         editor.setRootElement(editorRef.current);
+        setRefState(editor);
 
         // Registering Plugins
         mergeRegister(
@@ -61,7 +68,7 @@ export default function VanillaLexical() {
     const createNewNode = () => {
         editorInstance?.current?.update(() => {
             const root = $getRoot();
-            const {node, c_key} = $createDocNode(100,100, 500, 500, 'blue');
+            const {node, c_key} = $createDocNode(100, 100, 500, 500, 'blue');
 
             const parent = document.getElementById('horizontalrule');
             const parent2 = document.getElementById('vhorizontalrule');
@@ -71,16 +78,23 @@ export default function VanillaLexical() {
             const topNode = document.createElement('div');
             const downNode = document.createElement('div');
 
+            const id = c_key;
 
             leftNode.classList.add('rulerPoint');
             leftNode.classList.add('showGuide');
+            leftNode.id = 'l' + id;
+
             rightNode.classList.add('rulerPoint');
             rightNode.classList.add('showGuide');
+            rightNode.id = 'r' + id;
 
             topNode.classList.add('vrulerPoint');
             topNode.classList.add('vshowGuide');
+            topNode.id = 't' + id;
+
             downNode.classList.add('vrulerPoint');
             downNode.classList.add('vshowGuide');
+            downNode.id = 'd' + id;
 
             leftNode.style.left = '110px';
             rightNode.style.left = '610px';
@@ -100,7 +114,7 @@ export default function VanillaLexical() {
         })
     }
 
-    const splitNode = (key) => {
+    const splitNode = () => {
         editorInstance?.current?.update(() => {
             const root = $getRoot();
             const {node, c_key} = $createDocNode(100, 100, 100, 'blue');
@@ -110,36 +124,39 @@ export default function VanillaLexical() {
     }
 
     return (
-        <div>
 
-            <VerticalRuler />
+        <SomeContext value={ref_state}>
+            <div>
 
-            <HorizontalRuler/>
+                <VerticalRuler/>
 
-            <button onClick={() => createNewNode()}>
-                create new node
-            </button>
+                <HorizontalRuler/>
 
-            <button onClick={() => splitNode()}>
-                Split Node
-            </button>
+                <button onClick={() => createNewNode()}>
+                    create new node
+                </button>
 
-            <div
-                ref={editorRef}
-                contentEditable
-                suppressContentEditableWarning
-                style={{
-                    border: '1px solid #ccc',
-                    padding: '10px',
-                    fontFamily: 'sans-serif',
-                    margin: 'auto',
-                    height: '297mm',
-                    width: '210mm',
-                    background: 'white'
-                }}
-            />
+                <button onClick={() => splitNode()}>
+                    Split Node
+                </button>
+
+                <div
+                    ref={editorRef}
+                    contentEditable
+                    suppressContentEditableWarning
+                    style={{
+                        border: '1px solid #ccc',
+                        padding: '10px',
+                        fontFamily: 'sans-serif',
+                        margin: 'auto',
+                        height: '297mm',
+                        width: '210mm',
+                        background: 'white'
+                    }}
+                />
 
 
-        </div>
+            </div>
+        </SomeContext>
     );
 }

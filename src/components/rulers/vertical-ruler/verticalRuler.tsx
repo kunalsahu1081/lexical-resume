@@ -1,10 +1,15 @@
 import './v-ruler.css'
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {SomeContext} from "../../../app/App.tsx";
+import {$getNodeByKey, $getRoot} from "lexical";
+import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
 
 
 const VerticalRuler = () => {
 
     const [isDragging, set_isDragging] = useState(false);
+
+    const editor = useContext(SomeContext)
 
     const [initial_left] = useState(0);
     const [drag_id, set_drag_id] = useState('');
@@ -18,10 +23,13 @@ const VerticalRuler = () => {
             document.removeEventListener("mousemove", mouseMove);
         }
 
-    }, [isDragging, initial_left]);
+    }, [isDragging, initial_left, editor, drag_id]);
 
     useEffect(() => {
+        console.log(editor, 'editor editor')
+    }, [editor])
 
+    useEffect(() => {
 
 
         document.addEventListener("mousedown", mouseDown);
@@ -41,7 +49,7 @@ const VerticalRuler = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (e?.target.classList.contains('rulerPoint')) {
+        if (e?.target.classList.contains('vrulerPoint')) {
             set_isDragging(true);
             e?.target.classList.add('showGuide')
             e.target.style.cursor = "grabbing";
@@ -59,7 +67,27 @@ const VerticalRuler = () => {
 
             const segments = Math.floor(diff / 13);
 
-            box.style.top = Math.max(Math.round(Math.round(e.clientY - initial_left) - Math.round(e.clientY - initial_left - segments) % 6), 0) + 'px';
+            const top = Math.max(Math.round(Math.round(e.clientY - 160) - Math.round(e.clientY - 160 - segments) % 6), 0)
+
+            box.style.top = top + 'px';
+
+            const editor_key: any = drag_id?.slice(1, drag_id?.length);
+
+            editor?.update(() => {
+                const root = $getRoot();
+                const pNode: any = $getNodeByKey(editor_key);
+                if (pNode) {
+
+                    const n_top = drag_id[0] === 't' ? top : pNode.__top;
+                    const n_height = drag_id[0] === 't' ? pNode.__top - top + pNode.__height : top - pNode.__top;
+
+                    const {node, c_key} = $createDocNode(100, n_top, n_height, 500, 'blue');
+                    box.id = box.id[0] + c_key;
+                    set_drag_id(box.id[0] + c_key);
+                    pNode.replace(node);
+                }
+            })
+
         }
     }
 
@@ -68,9 +96,11 @@ const VerticalRuler = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        const box = document.getElementById(drag_id) ?? {};
-        set_isDragging(false);
-        box.style.cursor = "pointer";
+        if (isDragging) {
+            const box = document.getElementById(drag_id) ?? {};
+            set_isDragging(false);
+            box.style.cursor = "pointer";
+        }
         // box.classList.remove('showGuide')
     }
 
@@ -82,7 +112,7 @@ const VerticalRuler = () => {
             document.removeEventListener("mouseup", mouseUp);
         })
 
-    }, [])
+    }, [isDragging])
 
 
     return <div id={'vhorizontalrule'} className={'rulerVertical'}>
