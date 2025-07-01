@@ -1,14 +1,12 @@
-import './ruler.css'
+import './v-ruler.css'
 import {useEffect, useState} from "react";
 
 
-const HorizontalRuler = () => {
-
-    const [left, set_left] = useState<number>()
+const VerticalRuler = () => {
 
     const [isDragging, set_isDragging] = useState(false);
 
-    const [initial_left, set_initial_left] = useState(0);
+    const [initial_left] = useState(0);
     const [drag_id, set_drag_id] = useState('');
 
 
@@ -57,13 +55,11 @@ const HorizontalRuler = () => {
 
         if (isDragging) {
 
-            const diff = Math.floor((e.clientX - initial_left));
+            const diff = Math.floor((e.clientY - initial_left));
 
             const segments = Math.floor(diff / 13);
 
-            console.log(diff, segments);
-
-            box.style.left = Math.max(Math.round(Math.round(e.clientX - initial_left) - Math.round(e.clientX - initial_left - segments) % 6), 0) + 'px';
+            box.style.top = Math.max(Math.round(Math.round(e.clientY - initial_left) - Math.round(e.clientY - initial_left - segments) % 6), 0) + 'px';
         }
     }
 
@@ -80,8 +76,6 @@ const HorizontalRuler = () => {
 
     useEffect(() => {
 
-        set_initial_left(document?.getElementById('leftdrag')?.getBoundingClientRect()?.left)
-
         document.addEventListener("mouseup", mouseUp);
 
         return (() => {
@@ -91,9 +85,9 @@ const HorizontalRuler = () => {
     }, [])
 
 
-    return <div id={'horizontalrule'} className={'rulerHorizontal'}>
+    return <div id={'vhorizontalrule'} className={'rulerVertical'}>
 
-        <div className={'rulerFace'}>
+        <div className={'rulerFaceVertical'}>
 
             <RulerSegment ruler_number={1}/>
 
@@ -142,25 +136,23 @@ const RulerSegment = ({ruler_number}: { ruler_number: number }) => {
 
     return <>
 
-        <div className={'rulerNum'}
-             style={{left: ((ruler_number - 1) * 96) + 24 + (ruler_number - 1) * 8 + 2}}>{ruler_number}</div>
 
-        <div className={'largeSeg'} style={{left: ((ruler_number - 1) * 96)}}/>
+        <div className={'vlargeSeg'} style={{top: ((ruler_number - 1) * 96)}}/>
 
-        <div className={'smallSeg'} style={{left: ((ruler_number - 1) * 96) + 12}}/>
+        <div className={'vsmallSeg'} style={{top: ((ruler_number - 1) * 96) + 12}}/>
 
-        <div className={'smallSeg'} style={{left: ((ruler_number - 1) * 96) + 24}}/>
+        <div className={'vsmallSeg'} style={{top: ((ruler_number - 1) * 96) + 24}}/>
 
-        <div className={'smallSeg'} style={{left: ((ruler_number - 1) * 96) + 36}}/>
+        <div className={'vsmallSeg'} style={{top: ((ruler_number - 1) * 96) + 36}}/>
 
-        <div className={'largeSeg'} style={{left: ((ruler_number - 1) * 96) + 48}}/>
+        <div className={'vlargeSeg'} style={{top: ((ruler_number - 1) * 96) + 48}}/>
 
 
-        <div className={'smallSeg'} style={{left: ((ruler_number - 1) * 96) + 60}}/>
+        <div className={'vsmallSeg'} style={{top: ((ruler_number - 1) * 96) + 60}}/>
 
-        <div className={'smallSeg'} style={{left: ((ruler_number - 1) * 96) + 72}}/>
+        <div className={'vsmallSeg'} style={{top: ((ruler_number - 1) * 96) + 72}}/>
 
-        <div className={'smallSeg'} style={{left: ((ruler_number - 1) * 96) + 84}}/>
+        <div className={'vsmallSeg'} style={{top: ((ruler_number - 1) * 96) + 84}}/>
 
 
     </>
@@ -168,4 +160,4 @@ const RulerSegment = ({ruler_number}: { ruler_number: number }) => {
 
 }
 
-export default HorizontalRuler;
+export default VerticalRuler;

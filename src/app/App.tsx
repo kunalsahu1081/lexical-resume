@@ -7,6 +7,7 @@ import {registerRichText} from '@lexical/rich-text';
 import {mergeRegister} from '@lexical/utils';
 import {$createDocNode, DocumentTreeNode} from "../features/plugins/DocumentTreeNode.ts";
 import HorizontalRuler from "../components/rulers/horizontal-ruler/horizontalRuler.tsx";
+import VerticalRuler from "../components/rulers/vertical-ruler/verticalRuler.tsx";
 
 export default function VanillaLexical() {
     const editorRef = useRef<HTMLElement | null>(null);
@@ -37,9 +38,9 @@ export default function VanillaLexical() {
         editor.update(() => {
             const root = $getRoot();
             if (root.getChildrenSize() === 0) {
-                const paragraph = $createParagraphNode();
-                paragraph.append($createTextNode(' '));
-                root.append(paragraph);
+                // const paragraph = $createParagraphNode();
+                // paragraph.append($createTextNode(' '));
+                // root.append(paragraph);
             }
         });
 
@@ -60,23 +61,58 @@ export default function VanillaLexical() {
     const createNewNode = () => {
         editorInstance?.current?.update(() => {
             const root = $getRoot();
-            const paragraph = $createDocNode(100, 100, 100, 'blue');
-            paragraph.append($createTextNode(' '));
-            root.append(paragraph);
+            const {node, c_key} = $createDocNode(100,100, 500, 500, 'blue');
+
+            const parent = document.getElementById('horizontalrule');
+            const parent2 = document.getElementById('vhorizontalrule');
+
+            const leftNode = document.createElement('div');
+            const rightNode = document.createElement('div');
+            const topNode = document.createElement('div');
+            const downNode = document.createElement('div');
+
+
+            leftNode.classList.add('rulerPoint');
+            leftNode.classList.add('showGuide');
+            rightNode.classList.add('rulerPoint');
+            rightNode.classList.add('showGuide');
+
+            topNode.classList.add('vrulerPoint');
+            topNode.classList.add('vshowGuide');
+            downNode.classList.add('vrulerPoint');
+            downNode.classList.add('vshowGuide');
+
+            leftNode.style.left = '110px';
+            rightNode.style.left = '610px';
+
+            topNode.style.top = '100px';
+            downNode.style.top = '600px';
+
+            parent.append(leftNode);
+            parent.append(rightNode);
+
+            parent2.append(topNode);
+            parent2.append(downNode);
+
+
+            node.append($createTextNode(' '));
+            root.append(node);
         })
     }
 
-    const splitNode = () => {
+    const splitNode = (key) => {
         editorInstance?.current?.update(() => {
             const root = $getRoot();
-            const paragraph = $createDocNode(100, 100, 100, 'blue');
-            paragraph.append($createTextNode(' '));
-            root.append(paragraph);
+            const {node, c_key} = $createDocNode(100, 100, 100, 'blue');
+            node.append($createTextNode(' '));
+            root.append(node);
         })
     }
 
     return (
         <div>
+
+            <VerticalRuler />
 
             <HorizontalRuler/>
 

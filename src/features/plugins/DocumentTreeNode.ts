@@ -21,6 +21,7 @@ export type SerializedDocNode = Spread<
 export class DocumentTreeNode extends ElementNode {
 
     __top: number;
+    __left: number;
     __height: number;
     __width: number;
     __background: string;
@@ -43,12 +44,13 @@ export class DocumentTreeNode extends ElementNode {
     //     return {...super.exportJSON(), top: this.__top, height: this.__height, width: this.__width, background: this.__background};
     // }
 
-    constructor(top: number = 0, height: number = 0, width: number = 0, background: string = '', key?: NodeKey) {
+    constructor(left:number = 0,top: number = 0, height: number = 0, width: number = 0, background: string = '', key?: NodeKey) {
 
         super(key);
 
         this.__c_key = key;
         this.__background = background;
+        this.__left = left;
         this.__top = top;
         this.__width = width;
         this.__height = height;
@@ -63,6 +65,7 @@ export class DocumentTreeNode extends ElementNode {
         dom.style.top = this.__top + 'px';
         dom.style.width = this.__width + 'px';
         dom.style.height = this.__height + 'px';
+        dom.style.left = this.__left + 'px';
         dom.style.background = this.__background;
 
         return dom;
@@ -81,9 +84,9 @@ export class DocumentTreeNode extends ElementNode {
 
 }
 
-export function $createDocNode(top: number = 0, height: number = 0, width: number = 0, background: string = ''): {node: DocumentTreeNode, c_key: NodeKey | undefined} {
+export function $createDocNode(left: number = 0,top: number = 0, height: number = 0, width: number = 0, background: string = ''): {node: DocumentTreeNode, c_key: NodeKey | undefined} {
 
-    const newNode = new DocumentTreeNode(top, height, width, background);
+    const newNode = new DocumentTreeNode(left, top, height, width, background);
 
     return {node: $applyNodeReplacement(newNode), c_key: newNode.__c_key}
 

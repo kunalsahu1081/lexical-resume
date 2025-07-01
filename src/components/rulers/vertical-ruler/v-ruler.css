@@ -1,0 +1,56 @@
+
+
+.rulerVertical {
+
+    display: flex;
+    position: absolute;
+    left: 20px;
+    top: 160px;
+    /*margin: 36px auto 36px auto;*/
+    height: 297mm;
+}
+
+.rulerFaceVertical {
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 357mm;
+    overflow: hidden;
+    width: 36px;
+
+}
+
+.vshowGuide:after {
+    transform: translateY(6px);
+    content: "";
+    position: absolute;
+    width: 1400px;
+    height: 1px;
+    background: #4ad0ee;
+}
+
+.vlargeSeg {
+    position: relative;
+    width: 12px;
+    height: 1px;
+    background: white;
+}
+
+.vsmallSeg {
+    position: relative;
+    width: 8px;
+    height: 1px;
+    background: white;
+}
+
+
+.vrulerPoint {
+    position: absolute;
+    transform: translateY(-50%);
+    height: 12px;
+    width: 4px;
+    background: #4ad0ee;
+    z-index: 12;
+    cursor: pointer;
+}
