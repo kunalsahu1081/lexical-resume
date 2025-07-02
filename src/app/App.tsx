@@ -9,7 +9,9 @@ import {$createDocNode, DocumentTreeNode} from "../features/plugins/DocumentTree
 import HorizontalRuler from "../components/rulers/horizontal-ruler/horizontalRuler.tsx";
 import VerticalRuler from "../components/rulers/vertical-ruler/verticalRuler.tsx";
 
-const nodeBoundaryObject: any = {};
+export const nodeBoundaryObject: any = {};
+
+export const nodeArray = [];
 
 export const SomeContext = createContext<unknown>(null)
 
@@ -65,10 +67,10 @@ export default function VanillaLexical() {
         };
     }, []);
 
-    const createNewNode = () => {
+    const createNewNode = (color = 'red') => {
         editorInstance?.current?.update(() => {
             const root = $getRoot();
-            const {node, c_key} = $createDocNode(100, 100, 500, 500, 'blue');
+            const {node, c_key} = $createDocNode(100, 100, 500, 500, color);
 
             const parent = document.getElementById('horizontalrule');
             const parent2 = document.getElementById('vhorizontalrule');
@@ -80,20 +82,40 @@ export default function VanillaLexical() {
 
             const id = c_key;
 
+            nodeArray.push(id);
+
+            const index = nodeArray?.length - 1;
+
             leftNode.classList.add('rulerPoint');
             leftNode.classList.add('showGuide');
+
+            if (!nodeBoundaryObject['l' + id]) nodeBoundaryObject['l' + id] = {left: [], right: [], top: [], down: []}
+            nodeBoundaryObject['l' + id]['left'].push(index);
+
             leftNode.id = 'l' + id;
 
             rightNode.classList.add('rulerPoint');
             rightNode.classList.add('showGuide');
+
+            if (!nodeBoundaryObject['r' + id]) nodeBoundaryObject['r' + id] = {left: [], right: [], top: [], down: []}
+            nodeBoundaryObject['r' + id]['right'].push(index);
+
             rightNode.id = 'r' + id;
 
             topNode.classList.add('vrulerPoint');
             topNode.classList.add('vshowGuide');
+
+            if (!nodeBoundaryObject['t' + id]) nodeBoundaryObject['t' + id] = {left: [], right: [], top: [], down: []}
+            nodeBoundaryObject['t' + id]['top'].push(index);
+
             topNode.id = 't' + id;
 
             downNode.classList.add('vrulerPoint');
             downNode.classList.add('vshowGuide');
+
+            if (!nodeBoundaryObject['d' + id]) nodeBoundaryObject['d' + id] = {left: [], right: [], top: [], down: []}
+            nodeBoundaryObject['d' + id]['down'].push(index);
+
             downNode.id = 'd' + id;
 
             leftNode.style.left = '110px';
@@ -115,12 +137,7 @@ export default function VanillaLexical() {
     }
 
     const splitNode = () => {
-        editorInstance?.current?.update(() => {
-            const root = $getRoot();
-            const {node, c_key} = $createDocNode(100, 100, 100, 'blue');
-            node.append($createTextNode(' '));
-            root.append(node);
-        })
+        createNewNode('blue')
     }
 
     return (

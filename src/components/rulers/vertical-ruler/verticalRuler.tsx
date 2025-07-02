@@ -1,6 +1,6 @@
 import './v-ruler.css'
 import {useContext, useEffect, useState} from "react";
-import {SomeContext} from "../../../app/App.tsx";
+import {nodeArray, nodeBoundaryObject, SomeContext} from "../../../app/App.tsx";
 import {$getNodeByKey, $getRoot} from "lexical";
 import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
 
@@ -71,21 +71,41 @@ const VerticalRuler = () => {
 
             box.style.top = top + 'px';
 
-            const editor_key: any = drag_id?.slice(1, drag_id?.length);
+            const bottomNodeKeys = nodeBoundaryObject[drag_id]['down'];
+
+            const topNodeKeys = nodeBoundaryObject[drag_id]['top'];
+
 
             editor?.update(() => {
                 const root = $getRoot();
-                const pNode: any = $getNodeByKey(editor_key);
-                if (pNode) {
 
-                    const n_top = drag_id[0] === 't' ? top : pNode.__top;
-                    const n_height = drag_id[0] === 't' ? pNode.__top - top + pNode.__height : top - pNode.__top;
+                bottomNodeKeys?.map((editor_key) => {
+                    const pNode: any = $getNodeByKey(nodeArray[editor_key]);
+                    if (pNode) {
 
-                    const {node, c_key} = $createDocNode(100, n_top, n_height, 500, 'blue');
-                    box.id = box.id[0] + c_key;
-                    set_drag_id(box.id[0] + c_key);
-                    pNode.replace(node);
-                }
+                        const n_top = pNode.__top;
+                        const n_height =  top - pNode.__top;
+
+                        const {node, c_key} = $createDocNode(pNode.__left, n_top, n_height, pNode.__width, pNode.__background);
+
+                        nodeArray[editor_key] = c_key;
+                        pNode.replace(node);
+                    }
+                });
+
+                topNodeKeys?.map((editor_key) => {
+                    const pNode: any = $getNodeByKey(nodeArray[editor_key]);
+                    if (pNode) {
+
+                        const n_top =  top
+                        const n_height =  pNode.__top - top + pNode.__height;
+
+                        const {node, c_key} = $createDocNode(pNode.__left, n_top, n_height, pNode.__width, pNode.__background);
+
+                        nodeArray[editor_key] = c_key;
+                        pNode.replace(node);
+                    }
+                });
             })
 
         }

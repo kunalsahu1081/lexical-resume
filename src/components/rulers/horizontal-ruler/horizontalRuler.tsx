@@ -1,15 +1,19 @@
 import './ruler.css'
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {nodeArray, nodeBoundaryObject, SomeContext} from "../../../app/App.tsx";
+import {$getNodeByKey, $getRoot} from "lexical";
+import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
 
 
 const HorizontalRuler = () => {
 
-    const [left, set_left] = useState<number>()
 
     const [isDragging, set_isDragging] = useState(false);
 
-    const [initial_left, set_initial_left] = useState(0);
+    const [initial_left] = useState(0);
     const [drag_id, set_drag_id] = useState('');
+
+    const editor = useContext(SomeContext)
 
 
     useEffect(() => {
@@ -20,10 +24,13 @@ const HorizontalRuler = () => {
             document.removeEventListener("mousemove", mouseMove);
         }
 
-    }, [isDragging, initial_left]);
+    }, [isDragging, initial_left, editor, drag_id]);
 
     useEffect(() => {
+        console.log(editor, 'editor editor')
+    }, [editor])
 
+    useEffect(() => {
 
 
         document.addEventListener("mousedown", mouseDown);
@@ -55,15 +62,57 @@ const HorizontalRuler = () => {
 
         const box = document.getElementById(drag_id) ?? {};
 
+        const Ileft = document?.getElementById('horizontalrule')?.getBoundingClientRect()?.left;
+
         if (isDragging) {
 
             const diff = Math.floor((e.clientX - initial_left));
 
             const segments = Math.floor(diff / 13);
 
-            console.log(diff, segments);
+            let left = Math.max(Math.round(Math.round(e.clientX - Ileft) - Math.round(e.clientX - Ileft - segments) % 6), 0);
 
-            box.style.left = Math.max(Math.round(Math.round(e.clientX - initial_left) - Math.round(e.clientX - initial_left - segments) % 6), 0) + 'px';
+            box.style.left = left + 'px';
+
+            left-=10;
+
+            const leftNodeKeys = nodeBoundaryObject[drag_id]['left'];
+
+            const rightNodeKeys = nodeBoundaryObject[drag_id]['right'];
+
+
+            editor?.update(() => {
+                const root = $getRoot();
+
+                leftNodeKeys?.map((editor_key) => {
+                    const pNode: any = $getNodeByKey(nodeArray[editor_key]);
+                    if (pNode) {
+
+                        const n_left = left;
+                        const n_width = pNode.__left - left + pNode.__width;
+
+                        const {node, c_key} = $createDocNode(n_left, pNode.__top, pNode.__height, n_width, pNode.__background);
+
+                        nodeArray[editor_key] = c_key;
+                        pNode.replace(node);
+                    }
+                });
+
+                rightNodeKeys?.map((editor_key) => {
+                    const pNode: any = $getNodeByKey(nodeArray[editor_key]);
+                    if (pNode) {
+
+                        const n_left = pNode.__left
+                        const n_width = left - pNode.__left;
+
+                        const {node, c_key} = $createDocNode(n_left, pNode.__top, pNode.__height, n_width, pNode.__background);
+
+                        nodeArray[editor_key] = c_key;
+                        pNode.replace(node);
+                    }
+                });
+            })
+
         }
     }
 
@@ -72,15 +121,15 @@ const HorizontalRuler = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        const box = document.getElementById(drag_id) ?? {};
-        set_isDragging(false);
-        box.style.cursor = "pointer";
+        if (isDragging) {
+            const box = document.getElementById(drag_id) ?? {};
+            set_isDragging(false);
+            box.style.cursor = "pointer";
+        }
         // box.classList.remove('showGuide')
     }
 
     useEffect(() => {
-
-        set_initial_left(document?.getElementById('leftdrag')?.getBoundingClientRect()?.left)
 
         document.addEventListener("mouseup", mouseUp);
 
@@ -88,7 +137,7 @@ const HorizontalRuler = () => {
             document.removeEventListener("mouseup", mouseUp);
         })
 
-    }, [])
+    }, [isDragging])
 
 
     return <div id={'horizontalrule'} className={'rulerHorizontal'}>
