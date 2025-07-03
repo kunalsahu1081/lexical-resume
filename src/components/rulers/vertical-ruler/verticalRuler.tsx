@@ -1,8 +1,9 @@
 import './v-ruler.css'
 import {useContext, useEffect, useState} from "react";
-import {nodeArray, nodeBoundaryObject, SomeContext} from "../../../app/App.tsx";
+import { SomeContext} from "../../../app/App.tsx";
 import {$getNodeByKey, $getRoot} from "lexical";
 import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
+import {nodeArray, nodeBoundaryObject} from "../../../utils/createNode.ts";
 
 
 const VerticalRuler = () => {
