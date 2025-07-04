@@ -74,7 +74,7 @@ export const
             parent2.append(downNode);
 
 
-            node.append($createTextNode(' '));
+            node.append($createTextNode(' asdfasdfasdf'));
             root.append(node);
         })
     }

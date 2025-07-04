@@ -6,8 +6,21 @@
     width: auto;
     height: auto;
 
-    display: flex;
     flex-direction: column;
+
+    background: white;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: none;
+
+    list-style: none;
+    z-index: 12;
+    padding: 0;
+
+}
+
+.showContextMenu {
+    display: flex !important;
 
 }
 
@@ -15,8 +28,21 @@
 
     display: flex;
     cursor: pointer;
+    position: relative;
+    align-items: center;
 
-    align-items: flex-start;
-    justify-content: center;
+    border-bottom: 1px solid #3a3939;
+    color: black;
+    padding: 8px;
+}
+
+.contextItem:hover {
+    background: rgba(107, 107, 215, 0.1);
+}
+
+.contextItem:active {
+
+    background: rgba(148, 57, 57, 0.3);
 
 }
+

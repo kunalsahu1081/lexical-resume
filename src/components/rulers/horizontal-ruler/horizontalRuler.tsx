@@ -48,8 +48,8 @@ const HorizontalRuler = () => {
 
     const mouseDown = (e) => {
 
-        e.preventDefault();
-        e.stopPropagation();
+        // e.preventDefault();
+        // e.stopPropagation();
 
         if (e?.target.classList.contains('rulerPoint')) {
             set_isDragging(true);
@@ -119,8 +119,8 @@ const HorizontalRuler = () => {
 
     const mouseUp = (e) => {
 
-        e.preventDefault();
-        e.stopPropagation();
+        // e.preventDefault();
+        // e.stopPropagation();
 
         if (isDragging) {
             const box = document.getElementById(drag_id) ?? {};

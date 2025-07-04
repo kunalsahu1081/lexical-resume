@@ -1,6 +1,6 @@
 // VanillaLexical.jsx
 import {createContext, useEffect, useRef, useState} from 'react';
-import {$getRoot, createEditor, ParagraphNode, TextNode,} from 'lexical';
+import {$createParagraphNode, $createTextNode, $getRoot, createEditor, ParagraphNode, TextNode,} from 'lexical';
 import {registerDragonSupport} from '@lexical/dragon';
 import {createEmptyHistoryState, registerHistory} from '@lexical/history';
 import {registerRichText} from '@lexical/rich-text';
@@ -12,8 +12,6 @@ import EditorMenu from "../features/editor-menu";
 import {createNewNode} from "../utils/createNode.ts";
 
 
-const nodes : any =  [ParagraphNode, TextNode, DocumentTreeNode];
-
 export const SomeContext = createContext<unknown>(null)
 
 export default function VanillaLexical() {
@@ -21,21 +19,23 @@ export default function VanillaLexical() {
     const editorInstance = useRef<unknown>(null);
     const [ref_state, setRefState] = useState<any>(null);
 
+    const [c_menu_pos, set_c_menu_pos] = useState<any>({x: 0, y: 0, visible: false});
 
+
+    // create editor on mount
     useEffect(() => {
         if (!editorRef.current) return;
 
         const editor = createEditor({
             namespace: 'VanillaLexicalEditor',
             onError: (error) => console.error('Lexical Error:', error),
-            nodes: nodes,
+            nodes: [ParagraphNode, TextNode, DocumentTreeNode],
         });
 
         editorInstance.current = editor;
 
         // Mount to the DOM
         editor.setRootElement(editorRef.current);
-        setRefState(editor);
 
         // Registering Plugins
         mergeRegister(
@@ -44,9 +44,37 @@ export default function VanillaLexical() {
             registerHistory(editor, createEmptyHistoryState(), 300),
         );
 
+
+        // Log changes
+        const unregister = editor.registerUpdateListener(({editorState}) => {
+            editorState.read(() => {
+                const root = $getRoot();
+                console.log('Editor content:', root.getTextContent());
+            });
+        });
+
         return () => {
+            unregister();
             editor.setRootElement(null);
         };
+    }, []);
+
+    const showContextMenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        set_c_menu_pos({x: e.x, y: e.y, visible: true, target: e.target.id});
+    }
+
+    // listeners on mount
+    useEffect(() => {
+
+        document.getElementById('editorDoc')?.addEventListener('contextmenu', showContextMenu);
+
+        return () => {
+            document.getElementById('editorDoc')?.removeEventListener('contextmenu', showContextMenu);
+        }
+
     }, []);
 
     const createDocNode = () => {
@@ -63,7 +91,7 @@ export default function VanillaLexical() {
 
                 <HorizontalRuler/>
 
-                <EditorMenu />
+                <EditorMenu c_menu_props={c_menu_pos} />
 
                 <button onClick={() => createDocNode()}>
                     create new node
@@ -91,6 +119,6 @@ export default function VanillaLexical() {
 
 
             </div>
-        </SomeContext>
+         </SomeContext>
     );
 }

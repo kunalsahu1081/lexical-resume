@@ -2,11 +2,11 @@ import './contextMenu.css'
 
 const ContextMenu: any = {}
 
-ContextMenu.wrapper = ({children}) => {
+ContextMenu.wrapper = ({children, is_visible, left, top}) => {
 
     return <>
 
-        <ul className={'contextMenu'}>
+        <ul style={{left: left, top: top}} className={`contextMenu ${is_visible ? 'showContextMenu' : ''}`}>
 
             {children}
 

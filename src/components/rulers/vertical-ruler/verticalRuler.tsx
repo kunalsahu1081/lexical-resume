@@ -47,8 +47,6 @@ const VerticalRuler = () => {
 
     const mouseDown = (e) => {
 
-        e.preventDefault();
-        e.stopPropagation();
 
         if (e?.target.classList.contains('vrulerPoint')) {
             set_isDragging(true);
@@ -114,8 +112,6 @@ const VerticalRuler = () => {
 
     const mouseUp = (e) => {
 
-        e.preventDefault();
-        e.stopPropagation();
 
         if (isDragging) {
             const box = document.getElementById(drag_id) ?? {};

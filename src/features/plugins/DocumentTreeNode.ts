@@ -61,6 +61,7 @@ export class DocumentTreeNode extends ElementNode {
         // Define the DOM element here
         const dom = document.createElement('div');
 
+        dom.id = this.__key;
         dom.style.position = 'relative';
         dom.style.top = this.__top + 'px';
         dom.style.width = this.__width + 'px';
