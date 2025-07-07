@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "@lexical/react": "^0.32.1",
+    "dayjs": "^1.11.13",
     "lexical": "^0.32.1",
-    "moment": "^2.30.1",
+    "moment": "2.29.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

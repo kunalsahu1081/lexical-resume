@@ -85,9 +85,16 @@ const HorizontalRuler = () => {
             editor?.update(() => {
                 const root = $getRoot();
 
+                console.log(leftNodeKeys, 'leftNodeKeys')
+
                 leftNodeKeys?.map((editor_key) => {
                     const pNode: any = $getNodeByKey(nodeArray[editor_key]);
+
+                    console.log(pNode, nodeArray)
+
                     if (pNode) {
+
+                        console.log(pNode)
 
                         const n_left = left;
                         const n_width = pNode.__left - left + pNode.__width;

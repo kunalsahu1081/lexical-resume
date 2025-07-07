@@ -1,7 +1,9 @@
 import ContextMenu from "../../components/context-menu/contextMenu.tsx";
-import {useContext} from "react";
+import {useCallback, useContext} from "react";
 import {SomeContext} from "../../app/App.tsx";
 import {$getNodeByKey} from "lexical";
+import {boundaryKeys, createNewNode, nodeArray} from "../../utils/createNode.ts";
+import moment from "moment/moment";
 
 
 const EditorMenu = ({c_menu_props}) => {
@@ -9,13 +11,16 @@ const EditorMenu = ({c_menu_props}) => {
 
     const editor = useContext(SomeContext);
 
-    const splitNodeHorizontal = () => {
+    const splitNodeHorizontal = useCallback(() => {
 
-        editor.update(() => {
+
+        editor?.update(() => {
 
             const nodeId = c_menu_props.target;
 
             const node: any = $getNodeByKey(nodeId);
+
+            console.log('node id', c_menu_props.target, node)
 
             if (node) {
 
@@ -25,13 +30,23 @@ const EditorMenu = ({c_menu_props}) => {
                 const width = node.__width;
                 const bg = node.__background;
 
+                const left_id = 'c_key' + moment().format('DD|MM|hh|mm|ss');
 
+                const boundaryKey = boundaryKeys[nodeId];
+
+                const replacementId = nodeArray.indexOf(nodeId);
+
+                createNewNode(editor, 'red', left, top, height, width / 2, {...boundaryKey, right_id: left_id}, replacementId);
+
+                createNewNode(editor, 'blue', left + width / 2, top, height, width / 2, {...boundaryKey, left_id: left_id}, replacementId);
+
+                node.remove();
 
             }
 
         })
 
-    }
+    }, [editor, c_menu_props.target])
 
     const splitNodeVertical = () => {
 

@@ -34,6 +34,8 @@ export default function VanillaLexical() {
 
         editorInstance.current = editor;
 
+        setRefState(editor);
+
         // Mount to the DOM
         editor.setRootElement(editorRef.current);
 
@@ -108,12 +110,13 @@ export default function VanillaLexical() {
                     suppressContentEditableWarning
                     style={{
                         border: '1px solid #ccc',
-                        padding: '10px',
+                        // padding: '10px',
                         fontFamily: 'sans-serif',
                         margin: 'auto',
                         height: '297mm',
                         width: '210mm',
-                        background: 'white'
+                        background: 'white',
+                        position: 'relative'
                     }}
                 />
 
