@@ -32,13 +32,21 @@ const EditorMenu = ({c_menu_props}) => {
 
                 const left_id = 'c_key' + moment().format('DD|MM|hh|mm|ss');
 
+                document.createElement('div').id = left_id;
+
                 const boundaryKey = boundaryKeys[nodeId];
 
                 const replacementId = nodeArray.indexOf(nodeId);
 
-                createNewNode(editor, 'red', left, top, height, width / 2, {...boundaryKey, right_id: left_id}, replacementId);
+                createNewNode(editor, 'red', left, top, height, width / 2, {
+                    ...boundaryKey,
+                    right_id: left_id
+                }, replacementId);
 
-                createNewNode(editor, 'blue', left + width / 2, top, height, width / 2, {...boundaryKey, left_id: left_id}, replacementId);
+                createNewNode(editor, 'blue', left + width / 2, top, height, width / 2, {
+                    ...boundaryKey,
+                    left_id: left_id
+                }, null);
 
                 node.remove();
 
@@ -50,11 +58,51 @@ const EditorMenu = ({c_menu_props}) => {
 
     const splitNodeVertical = () => {
 
+        editor?.update(() => {
+
+            const nodeId = c_menu_props.target;
+
+            const node: any = $getNodeByKey(nodeId);
+
+            console.log('node id', c_menu_props.target, node)
+
+            if (node) {
+
+                const left = node.__left;
+                const top = node.__top;
+                const height = node.__height;
+                const width = node.__width;
+                const bg = node.__background;
+
+                const top_id = 'c_keyt' + moment().format('DD|MM|hh|mm|ss');
+
+                const boundaryKey = boundaryKeys[nodeId];
+
+                const replacementId = nodeArray.indexOf(nodeId);
+
+                console.log(boundaryKey)
+
+                document.createElement('div').id = top_id;
+
+                createNewNode(editor, 'red', left, top, height / 2, width, {
+                    ...boundaryKey,
+                    bottom_id: top_id
+                }, replacementId);
+
+                createNewNode(editor, 'green', left, top + height / 2, height / 2, width, {
+                    ...boundaryKey,
+                    top_id: top_id
+                }, null);
+
+                node.remove();
+
+            }
+
+        })
 
     }
 
     const deleteNode = () => {
-
 
 
     }

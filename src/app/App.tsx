@@ -9,7 +9,7 @@ import {DocumentTreeNode} from "../features/plugins/DocumentTreeNode.ts";
 import HorizontalRuler from "../components/rulers/horizontal-ruler/horizontalRuler.tsx";
 import VerticalRuler from "../components/rulers/vertical-ruler/verticalRuler.tsx";
 import EditorMenu from "../features/editor-menu";
-import {createNewNode} from "../utils/createNode.ts";
+import {boundaryKeys, createNewNode, nodeArray, nodeBoundaryObject} from "../utils/createNode.ts";
 
 
 export const SomeContext = createContext<unknown>(null)
@@ -93,10 +93,18 @@ export default function VanillaLexical() {
 
                 <HorizontalRuler/>
 
-                <EditorMenu c_menu_props={c_menu_pos} />
+                <EditorMenu c_menu_props={c_menu_pos}/>
 
                 <button onClick={() => createDocNode()}>
                     create new node
+                </button>
+
+                <button onClick={() => {
+                    console.log(nodeArray, 'nodeArray');
+                    console.log(boundaryKeys, 'boundaryKeys');
+                    console.log(nodeBoundaryObject, 'nodeBoundaryObject')
+                }}>
+                    log constants
                 </button>
 
                 {/*<button onClick={() => splitNode()}>*/}
@@ -122,6 +130,6 @@ export default function VanillaLexical() {
 
 
             </div>
-         </SomeContext>
+        </SomeContext>
     );
 }

@@ -33,7 +33,7 @@ export const
             const topNode = document?.getElementById(top_id) || document.createElement('div');
             const downNode = document?.getElementById(bottom_id) || document.createElement('div');
 
-            if (replace_id_index) {
+            if (replace_id_index != null) {
                 nodeArray[replace_id_index] = c_key;
             } else {
                 nodeArray.push(c_key);

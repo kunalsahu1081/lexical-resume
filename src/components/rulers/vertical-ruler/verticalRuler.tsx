@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import { SomeContext} from "../../../app/App.tsx";
 import {$getNodeByKey, $getRoot} from "lexical";
 import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
-import {nodeArray, nodeBoundaryObject} from "../../../utils/createNode.ts";
+import {boundaryKeys, nodeArray, nodeBoundaryObject} from "../../../utils/createNode.ts";
 
 
 const VerticalRuler = () => {
@@ -62,13 +62,15 @@ const VerticalRuler = () => {
 
         if (isDragging) {
 
-            const diff = Math.floor((e.clientY - initial_left));
+            const diff = Math.floor((e.pageY  - 160));
 
             const segments = Math.floor(diff / 13);
 
-            const top = Math.max(Math.round(Math.round(e.clientY - 160) - Math.round(e.clientY - 160 - segments) % 6), 0)
+            const top = Math.max(Math.round(Math.round(e.pageY - 160 ) - Math.round(e.pageY - 160 - segments) % 6), 0)
 
-            box.style.top = top + 'px';
+            box.style.top = top - 10 + 'px';
+
+            // console.log(top, e.clientY)
 
             const bottomNodeKeys = nodeBoundaryObject[drag_id]['down'];
 
@@ -87,8 +89,14 @@ const VerticalRuler = () => {
 
                         const {node, c_key} = $createDocNode(pNode.__left, n_top, n_height, pNode.__width, pNode.__background);
 
+
+                         boundaryKeys[c_key] = {...boundaryKeys[nodeArray[editor_key]]};
+                         delete boundaryKeys[nodeArray[editor_key]]
+
                         nodeArray[editor_key] = c_key;
-                        pNode.replace(node);
+
+                        root.append(node);
+                        pNode.remove();
                     }
                 });
 
@@ -101,8 +109,15 @@ const VerticalRuler = () => {
 
                         const {node, c_key} = $createDocNode(pNode.__left, n_top, n_height, pNode.__width, pNode.__background);
 
-                        nodeArray[editor_key] = c_key;
-                        pNode.replace(node);
+                        // nodeArray[editor_key] = c_key;
+
+                         boundaryKeys[c_key] = {...boundaryKeys[nodeArray[editor_key]]};
+                         delete boundaryKeys[nodeArray[editor_key]]
+
+                         nodeArray[editor_key] = c_key;
+
+                        root.append(node);
+                        pNode.remove();
                     }
                 });
             })

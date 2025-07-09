@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import { SomeContext} from "../../../app/App.tsx";
 import {$getNodeByKey, $getRoot} from "lexical";
 import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
-import {nodeArray, nodeBoundaryObject} from "../../../utils/createNode.ts";
+import {boundaryKeys, nodeArray, nodeBoundaryObject} from "../../../utils/createNode.ts";
 
 
 const HorizontalRuler = () => {
@@ -77,32 +77,38 @@ const HorizontalRuler = () => {
 
             left-=10;
 
-            const leftNodeKeys = nodeBoundaryObject[drag_id]['left'];
+            const leftNodeKeys = [...new Set(nodeBoundaryObject[drag_id]['left'])]
 
-            const rightNodeKeys = nodeBoundaryObject[drag_id]['right'];
+            const rightNodeKeys = [...new Set(nodeBoundaryObject[drag_id]['right'])]
 
 
             editor?.update(() => {
                 const root = $getRoot();
 
-                console.log(leftNodeKeys, 'leftNodeKeys')
 
-                leftNodeKeys?.map((editor_key) => {
+                leftNodeKeys?.map((editor_key, index) => {
                     const pNode: any = $getNodeByKey(nodeArray[editor_key]);
 
-                    console.log(pNode, nodeArray)
+
 
                     if (pNode) {
 
-                        console.log(pNode)
 
                         const n_left = left;
                         const n_width = pNode.__left - left + pNode.__width;
 
                         const {node, c_key} = $createDocNode(n_left, pNode.__top, pNode.__height, n_width, pNode.__background);
 
+
+
+                        boundaryKeys[c_key] = {...boundaryKeys[nodeArray[editor_key]]};
+                        delete boundaryKeys[nodeArray[editor_key]]
                         nodeArray[editor_key] = c_key;
-                        pNode.replace(node);
+
+                        root.append(node);
+                        pNode.remove();
+
+                        // pNode.replace(node);
                     }
                 });
 
@@ -115,8 +121,15 @@ const HorizontalRuler = () => {
 
                         const {node, c_key} = $createDocNode(n_left, pNode.__top, pNode.__height, n_width, pNode.__background);
 
+
+                         boundaryKeys[c_key] = {...boundaryKeys[nodeArray[editor_key]]};
+                         delete boundaryKeys[nodeArray[editor_key]]
                         nodeArray[editor_key] = c_key;
-                        pNode.replace(node);
+
+                        console.log(boundaryKeys, nodeArray[editor_key], c_key);
+
+                        root.append(node);
+                        pNode.remove();
                     }
                 });
             })
