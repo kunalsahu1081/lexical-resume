@@ -26,8 +26,6 @@ export const
 
             const {left_id = 'l' + id, right_id = 'r' + id, top_id = 't' + id, bottom_id = 'd' + id} =  boundary_ids;
 
-            console.log(boundary_ids, left_id)
-
             const leftNode = document?.getElementById(left_id) || document.createElement('div');
             const rightNode = document?.getElementById(right_id) || document.createElement('div');
             const topNode = document?.getElementById(top_id) || document.createElement('div');
@@ -41,7 +39,38 @@ export const
 
             boundaryKeys[c_key] = {left_id: left_id, right_id: right_id, top_id: top_id, bottom_id: bottom_id};
 
-            const index = replace_id_index || nodeArray?.length - 1;
+            const index = replace_id_index ?? nodeArray?.length - 1;
+
+            console.log(JSON.parse(JSON.stringify(nodeBoundaryObject)), boundary_ids)
+
+            for (const side in nodeBoundaryObject) {
+
+
+                nodeBoundaryObject[side]['right']?.forEach((val, pindex) => {
+
+                    if (val == replace_id_index) nodeBoundaryObject[side]['right'][pindex] = null;
+
+                })
+
+                nodeBoundaryObject[side]['top']?.forEach((val, pindex) => {
+
+                    if (val == replace_id_index) nodeBoundaryObject[side]['top'][pindex] = null;
+
+                })
+
+                nodeBoundaryObject[side]['left']?.forEach((val, pindex) => {
+
+                    if (val == replace_id_index) nodeBoundaryObject[side]['left'][pindex] = null;
+
+                })
+
+                nodeBoundaryObject[side]['down']?.forEach((val, pindex) => {
+
+                    if (val == replace_id_index) nodeBoundaryObject[side]['down'][pindex] = null;
+
+                })
+
+            }
 
             leftNode.classList.add('rulerPoint');
             leftNode.classList.add('showGuide');
@@ -78,8 +107,8 @@ export const
             leftNode.style.left = (left + 10 )+ 'px';
             rightNode.style.left = left + width + 10 + 'px';
 
-            topNode.style.top = top - 10 + 'px';
-            downNode.style.top = (top + height - 10) + 'px';
+            topNode.style.top = top + 72 + 'px';
+            downNode.style.top = (top + height + 72) + 'px';
 
             parent.append(leftNode);
             parent.append(rightNode);

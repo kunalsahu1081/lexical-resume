@@ -52,6 +52,9 @@ const HorizontalRuler = () => {
         // e.stopPropagation();
 
         if (e?.target.classList.contains('rulerPoint')) {
+
+            // document.body.style.overflow = 'hidden';
+
             set_isDragging(true);
             e?.target.classList.add('showGuide')
             e.target.style.cursor = "grabbing";
@@ -106,6 +109,8 @@ const HorizontalRuler = () => {
                         nodeArray[editor_key] = c_key;
 
                         root.append(node);
+
+
                         pNode.remove();
 
                         // pNode.replace(node);

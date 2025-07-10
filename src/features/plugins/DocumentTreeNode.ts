@@ -26,6 +26,7 @@ export class DocumentTreeNode extends ElementNode {
     __width: number;
     __background: string;
     __c_key: NodeKey | undefined;
+    __hide_init: boolean;
 
 
     static getType(): string {
@@ -33,7 +34,7 @@ export class DocumentTreeNode extends ElementNode {
     }
 
     static clone(node: DocumentTreeNode): DocumentTreeNode {
-        return new DocumentTreeNode(node.__left, node.__top, node.__height, node.__width, node.__background, node.__key);
+        return new DocumentTreeNode(node.__left, node.__top, node.__height, node.__width, node.__background, node.__hide_init, node.__key);
     }
 
     // static importJSON(serializedNode: SerializedDocNode): DocumentTreeNode {
@@ -44,7 +45,7 @@ export class DocumentTreeNode extends ElementNode {
     //     return {...super.exportJSON(), top: this.__top, height: this.__height, width: this.__width, background: this.__background};
     // }
 
-    constructor(left:number = 0,top: number = 0, height: number = 0, width: number = 0, background: string = '', key?: NodeKey) {
+    constructor(left:number = 0,top: number = 0, height: number = 0, width: number = 0, background: string = '', hide_init: boolean, key?: NodeKey) {
 
         super(key);
 
@@ -54,6 +55,7 @@ export class DocumentTreeNode extends ElementNode {
         this.__top = top;
         this.__width = width;
         this.__height = height;
+        this.__hide_init = hide_init
 
     }
 
@@ -62,6 +64,9 @@ export class DocumentTreeNode extends ElementNode {
         const dom = document.createElement('div');
 
         dom.id = this.__key;
+        if (this.__hide_init) {
+            // dom.style.display = 'none'
+        }
         dom.style.position = 'absolute';
         dom.style.top = this.__top + 'px';
         dom.style.width = this.__width + 'px';
@@ -86,9 +91,9 @@ export class DocumentTreeNode extends ElementNode {
 
 }
 
-export function $createDocNode(left: number = 0,top: number = 0, height: number = 0, width: number = 0, background: string = ''): {node: DocumentTreeNode, c_key: NodeKey | undefined} {
+export function $createDocNode(left: number = 0,top: number = 0, height: number = 0, width: number = 0, background: string = '', hide_init = false): {node: DocumentTreeNode, c_key: NodeKey | undefined} {
 
-    const newNode = new DocumentTreeNode(left, top, height, width, background);
+    const newNode = new DocumentTreeNode(left, top, height, width, background, hide_init);
 
     return {node: $applyNodeReplacement(newNode), c_key: newNode.__key}
 

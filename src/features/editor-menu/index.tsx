@@ -84,6 +84,8 @@ const EditorMenu = ({c_menu_props}) => {
 
                 document.createElement('div').id = top_id;
 
+                console.log(replacementId, 'replacementId')
+
                 createNewNode(editor, 'red', left, top, height / 2, width, {
                     ...boundaryKey,
                     bottom_id: top_id

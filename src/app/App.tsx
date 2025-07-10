@@ -87,7 +87,7 @@ export default function VanillaLexical() {
     return (
 
         <SomeContext value={ref_state}>
-            <div>
+            <div style={{marginTop: '100px'}}>
 
                 <VerticalRuler/>
 
@@ -95,11 +95,11 @@ export default function VanillaLexical() {
 
                 <EditorMenu c_menu_props={c_menu_pos}/>
 
-                <button onClick={() => createDocNode()}>
+                <button onClick={() => createDocNode()} style={{position: 'absolute', top: '25px'}}>
                     create new node
                 </button>
 
-                <button onClick={() => {
+                <button style={{position: 'absolute', top: '25px', left: '300px'}} onClick={() => {
                     console.log(nodeArray, 'nodeArray');
                     console.log(boundaryKeys, 'boundaryKeys');
                     console.log(nodeBoundaryObject, 'nodeBoundaryObject')
