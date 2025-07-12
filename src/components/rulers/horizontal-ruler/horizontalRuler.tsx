@@ -96,7 +96,6 @@ const HorizontalRuler = () => {
 
                     if (pNode) {
 
-
                         const n_left = left;
                         const n_width = pNode.__left - left + pNode.__width;
 

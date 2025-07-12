@@ -77,6 +77,15 @@ export class DocumentTreeNode extends ElementNode {
         return dom;
     }
 
+    setObjectProperties(top, width, left, height) {
+
+        if (top) this.__top = top;
+        if (width) this.__width = width;
+        if (left) this.__left = left;
+        if (height) this.__height = height;
+
+    }
+
     updateDOM(_prevNode: this, _dom: HTMLElement, _config: EditorConfig): boolean {
         // const isUpdated = super.updateDOM(_prevNode, _dom, _config);
 
