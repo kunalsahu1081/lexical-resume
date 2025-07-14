@@ -1,17 +1,17 @@
 import ContextMenu from "../../components/context-menu/contextMenu.tsx";
-import {useCallback, useContext} from "react";
-import {SomeContext} from "../../app/App.tsx";
+import {useCallback} from "react";
 import {$getNodeByKey, $getRoot} from "lexical";
 import {boundaryKeys, createNewNode, nodeArray, nodeBoundaryObject, nodeTreeMapping} from "../../utils/createNode.ts";
 import moment from "moment/moment";
 import {NodeModel} from "../../models/node-model";
 import {$createDocNode, DocumentTreeNode} from "../plugins/DocumentTreeNode";
+import {useLexicalComposerContext} from "@lexical/react/LexicalComposerContext";
 
 
 const EditorMenu = ({c_menu_props}) => {
 
 
-    const editor = useContext(SomeContext);
+    const [editor] = useLexicalComposerContext();
 
     const splitNodeHorizontal = useCallback(() => {
 

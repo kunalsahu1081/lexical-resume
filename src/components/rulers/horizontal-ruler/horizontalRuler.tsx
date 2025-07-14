@@ -1,9 +1,9 @@
 import './ruler.css'
-import {useContext, useEffect, useState} from "react";
-import { SomeContext} from "../../../app/App.tsx";
+import {useEffect, useState} from "react";
 import {$getNodeByKey, $getRoot} from "lexical";
 import {$createDocNode} from "../../../features/plugins/DocumentTreeNode.ts";
 import {boundaryKeys, nodeArray, nodeBoundaryObject} from "../../../utils/createNode.ts";
+import {useLexicalComposerContext} from "@lexical/react/LexicalComposerContext";
 
 
 const HorizontalRuler = () => {
@@ -14,7 +14,7 @@ const HorizontalRuler = () => {
     const [initial_left] = useState(0);
     const [drag_id, set_drag_id] = useState('');
 
-    const editor = useContext(SomeContext)
+    const [editor] = useLexicalComposerContext();
 
 
     useEffect(() => {
